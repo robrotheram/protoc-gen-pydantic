@@ -14,6 +14,7 @@ from pydantic import AnyUrl as _AnyUrl
 from pydantic import BeforeValidator as _BeforeValidator
 from pydantic import PlainSerializer as _PlainSerializer
 from pydantic import TypeAdapter as _TypeAdapter
+from pydantic import WithJsonSchema as _WithJsonSchema
 
 _url_adapter = _TypeAdapter(_AnyUrl)
 
@@ -57,6 +58,7 @@ ProtoTimestamp = _Annotated[
     _datetime.datetime,
     _BeforeValidator(_parse_timestamp),
     _PlainSerializer(_serialize_timestamp, return_type=str, when_used="json"),
+    _WithJsonSchema({"type": "string", "format": "date-time"}, mode="serialization"),
 ]
 
 

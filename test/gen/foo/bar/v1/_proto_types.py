@@ -7,6 +7,7 @@ from typing import Annotated as _Annotated
 
 from pydantic import BeforeValidator as _BeforeValidator
 from pydantic import PlainSerializer as _PlainSerializer
+from pydantic import WithJsonSchema as _WithJsonSchema
 
 
 def _coerce_int(v):
@@ -48,6 +49,7 @@ ProtoTimestamp = _Annotated[
     _datetime.datetime,
     _BeforeValidator(_parse_timestamp),
     _PlainSerializer(_serialize_timestamp, return_type=str, when_used="json"),
+    _WithJsonSchema({"type": "string", "format": "date-time"}, mode="serialization"),
 ]
 
 

@@ -314,6 +314,7 @@ ProtoTimestamp = _Annotated[
     _datetime.datetime,
     _BeforeValidator(_parse_timestamp),
     _PlainSerializer(_serialize_timestamp, return_type=str, when_used="json"),
+    _WithJsonSchema({"type": "string", "format": "date-time"}, mode="serialization"),
 ]
 
 
@@ -975,6 +976,7 @@ func buildProtoTypesContent(needed map[string]bool, config GeneratorConfig, dirC
 	if needURI {
 		b.WriteString("from pydantic import TypeAdapter as _TypeAdapter\n")
 	}
+	b.WriteString("from pydantic import WithJsonSchema as _WithJsonSchema\n")
 
 	// Module-level declarations.
 	if needURI {
