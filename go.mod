@@ -1,4 +1,4 @@
-module github.com/cjermain/protoc-gen-pydantic
+module github.com/robrotheram/protoc-gen-pydantic
 
 go 1.23.1
 
