@@ -30,7 +30,12 @@ ProtoUInt64 = _Annotated[
 
 def _parse_timestamp(v):
     if isinstance(v, str):
-        return _datetime.datetime.fromisoformat(v)
+        parsed = _datetime.datetime.fromisoformat(v)
+        if parsed.tzinfo is None:
+            raise ValueError(
+                f"Timestamp string must include a UTC offset or 'Z': {v!r}"
+            )
+        return parsed
     if isinstance(v, _datetime.datetime):
         return v
     raise ValueError(f"Cannot parse timestamp from {type(v)}")
@@ -39,6 +44,8 @@ def _parse_timestamp(v):
 def _serialize_timestamp(v):
     if v.tzinfo is None:
         v = v.replace(tzinfo=_datetime.timezone.utc)
+    else:
+        v = v.astimezone(_datetime.timezone.utc)
     s = v.strftime("%Y-%m-%dT%H:%M:%S")
     us = v.microsecond
     if us:
